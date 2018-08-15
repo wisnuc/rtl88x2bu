@@ -1,0 +1,42 @@
+diff --git a/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c b/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
+index 3e00e4a..8f0821c 100755
+--- a/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
++++ b/drivers/net/wireless/rockchip_wlan/wifi_sys/rkwifi_sys_iface.c
+@@ -137,6 +137,12 @@ static ssize_t wifi_chip_read(struct class *cls, struct class_attribute *attr, c
+             printk("Current WiFi chip is RTL8188FU.\n");
+         }
+ 
++
++        if(type == WIFI_RTL88x2BU) {
++            count = sprintf(_buf, "%s", "RTL88x2BU");
++            printk("Current WiFi chip is RTL88x2BU.\n");
++        }
++
+         if(type == WIFI_SSV6051) {
+ 	    count = sprintf(_buf, "%s", "SSV6051");
+             printk("Current WiFi chip is SSV6051.\n");
+diff --git a/include/linux/rfkill-wlan.h b/include/linux/rfkill-wlan.h
+index c191201..dde2451 100755
+--- a/include/linux/rfkill-wlan.h
++++ b/include/linux/rfkill-wlan.h
+@@ -71,6 +71,7 @@ enum {
+     WIFI_RTL8189FS,
+     WIFI_RTL8188FU,
+     WIFI_RTL8822BS,
++    WIFI_RTL88x2BU,
+     WIFI_RTL_SERIES,
+     WIFI_ESP8089,
+     WIFI_SSV6051,
+diff --git a/net/rfkill/rfkill-wlan.c b/net/rfkill/rfkill-wlan.c
+index af209ad..7b87895 100755
+--- a/net/rfkill/rfkill-wlan.c
++++ b/net/rfkill/rfkill-wlan.c
+@@ -150,6 +150,8 @@ int get_wifi_chip_type(void)
+         type = WIFI_RTL8189FS;
+     } else if (strcmp(wifi_chip_type_string, "rtl8188fu") == 0) {
+         type = WIFI_RTL8188FU;
++    } else if (strcmp(wifi_chip_type_string, "rtl88x2bu") == 0) {
++        type = WIFI_RTL88x2BU;
+     } else if (strcmp(wifi_chip_type_string, "rtl8822bs") == 0) {
+ 	type = WIFI_RTL8822BS;
+     } else if (strcmp(wifi_chip_type_string, "esp8089") == 0) {
